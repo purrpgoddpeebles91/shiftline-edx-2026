@@ -1,3 +1,5 @@
+import { chapterOneStory } from './story.js';
+
 const app = document.getElementById('app');
 const canvas = document.createElement('canvas');
 canvas.width = 960;
@@ -98,10 +100,7 @@ function buildStoryScreen() {
   screen.className = 'story-log';
   screen.innerHTML = `
     <h2>CHAPTER LOG</h2>
-    <p>The city still breathes, but only in fragments.</p>
-    <p>The gate ahead trembles because reality is trying to peel itself open.</p>
-    <p>Your shift-state is the only thing still holding the seams together.</p>
-    <p>You must cross the gate and survive the Warden before the city is erased.</p>
+    ${chapterOneStory.intro.map((line) => `<p>${line}</p>`).join('')}
     <button id="continue-btn">Continue</button>
   `;
 
@@ -146,6 +145,7 @@ function buildUpgradeScreen() {
   panel.className = 'upgrade-panel';
   panel.innerHTML = `
     <h3>Chapter Reward</h3>
+    ${chapterOneStory.upgrade.map((line) => `<p>${line}</p>`).join('')}
     <div class="upgrade-grid">
       <div class="upgrade-card">
         <h4>Rift Pulse</h4>
@@ -531,7 +531,7 @@ function startBossFight() {
   boss.hp = boss.maxHp;
   boss.phaseTimer = 0;
   boss.fireTimer = 0;
-  setStatus('Boss: The Warden of the Seams');
+  setStatus(chapterOneStory.bossStart[0]);
 }
 
 function updateBoss(dt) {
@@ -555,7 +555,7 @@ function updateBoss(dt) {
   if (boss.hp <= 0) {
     boss.active = false;
     score += 200;
-    setStatus('Gate shattered. Chapter clear.');
+    setStatus(chapterOneStory.bossWin[0]);
     upgradeUnlocked = true;
     screenState = 'upgrade';
     renderScreen();
