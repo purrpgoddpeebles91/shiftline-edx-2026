@@ -1,0 +1,11 @@
+{
+  "name": "shiftline-edx-2026",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HTML5 browser game prototype for Shiftline EDX 2026",
+  "scripts": {
+    "check": "node --check src/main.js",
+    "serve": "python3 -m http.server 4173",
+    "start": "python3 -m http.server 4173"
+  }
+}
