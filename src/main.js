@@ -10,6 +10,7 @@ const shiftStates = ['normal', 'echo', 'rift'];
 let screenState = 'title';
 let score = 0;
 let lastFrame = 0;
+let upgradeUnlocked = false;
 
 const ui = {
   status: null,
@@ -167,10 +168,20 @@ function buildUpgradeScreen() {
   panel.querySelectorAll('button[data-upgrade]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const choice = btn.dataset.upgrade;
-      if (choice === 'pulse') player.weaponLevel = 2;
-      if (choice === 'echo') player.speed += 20;
-      if (choice === 'breaker') player.jump += 30;
+      if (choice === 'pulse') {
+        player.weaponLevel = 2;
+        player.speed += 10;
+      }
+      if (choice === 'echo') {
+        player.speed += 25;
+        player.jump += 20;
+      }
+      if (choice === 'breaker') {
+        player.jump += 35;
+        player.weaponLevel = 3;
+      }
 
+      upgradeUnlocked = false;
       screenState = 'title';
       renderScreen();
     });
@@ -545,6 +556,7 @@ function updateBoss(dt) {
     boss.active = false;
     score += 200;
     setStatus('Gate shattered. Chapter clear.');
+    upgradeUnlocked = true;
     screenState = 'upgrade';
     renderScreen();
   }
