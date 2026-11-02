@@ -1,5 +1,3 @@
-import { chapterOneStory } from './story.js';
-
 const app = document.getElementById('app');
 const canvas = document.createElement('canvas');
 canvas.width = 960;
@@ -100,7 +98,10 @@ function buildStoryScreen() {
   screen.className = 'story-log';
   screen.innerHTML = `
     <h2>CHAPTER LOG</h2>
-    ${chapterOneStory.intro.map((line) => `<p>${line}</p>`).join('')}
+    <p>The city still breathes, but only in fragments.</p>
+    <p>The gate ahead trembles because reality is trying to peel itself open.</p>
+    <p>Your shift-state is the only thing still holding the seams together.</p>
+    <p>You must cross the gate and survive the Warden before the city is erased.</p>
     <button id="continue-btn">Continue</button>
   `;
 
@@ -131,11 +132,21 @@ function buildGameShell() {
     <div id="score">Shards: 0</div>
   `;
 
+  const controls = document.createElement('div');
+  controls.className = 'controls-strip';
+  controls.innerHTML = `
+    <div class="control-group"><span class="keycap">A / D</span><span>Move</span></div>
+    <div class="control-group"><span class="keycap">W / ↑ / Space</span><span>Jump</span></div>
+    <div class="control-group"><span class="keycap">J / Enter</span><span>Shoot</span></div>
+    <div class="control-group"><span class="keycap">C / E</span><span>Shift</span></div>
+  `;
+
   ui.status = hud.querySelector('#status');
   ui.score = hud.querySelector('#score');
 
   shell.appendChild(topbar);
   shell.appendChild(canvas);
+  shell.appendChild(controls);
   shell.appendChild(hud);
   return shell;
 }
@@ -145,7 +156,6 @@ function buildUpgradeScreen() {
   panel.className = 'upgrade-panel';
   panel.innerHTML = `
     <h3>Chapter Reward</h3>
-    ${chapterOneStory.upgrade.map((line) => `<p>${line}</p>`).join('')}
     <div class="upgrade-grid">
       <div class="upgrade-card">
         <h4>Rift Pulse</h4>
@@ -244,7 +254,7 @@ function resetBattle() {
 
 function startGame() {
   resetBattle();
-  setStatus('Chapter 1: The Fractured Gate');
+  setStatus('Chapter 1: Breach the Fractured Gate');
   updateHud();
   requestAnimationFrame(gameLoop);
 }
@@ -531,7 +541,7 @@ function startBossFight() {
   boss.hp = boss.maxHp;
   boss.phaseTimer = 0;
   boss.fireTimer = 0;
-  setStatus(chapterOneStory.bossStart[0]);
+  setStatus('Boss: The Warden of the Seams');
 }
 
 function updateBoss(dt) {
@@ -555,7 +565,7 @@ function updateBoss(dt) {
   if (boss.hp <= 0) {
     boss.active = false;
     score += 200;
-    setStatus(chapterOneStory.bossWin[0]);
+    setStatus('Gate shattered. Chapter clear.');
     upgradeUnlocked = true;
     screenState = 'upgrade';
     renderScreen();
@@ -738,6 +748,10 @@ function gameLoop(ts) {
 window.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
   keyState[key] = true;
+
+  if ([' ', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+    event.preventDefault();
+  }
 
   if (event.key === ' ') keyState[' '] = true;
   if (event.key === 'ArrowLeft') keyState.ArrowLeft = true;
